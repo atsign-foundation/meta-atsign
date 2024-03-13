@@ -5,75 +5,90 @@ alt="The Atsign Foundation"></a>
 src="https://atsign.com/wp-content/uploads/2023/08/atsign-logo-horizontal-reverse2022-Color.svg#gh-dark-mode-only"
 alt="The Atsign Foundation"></a></h1>
 
-# Sample README
+# meta-hellocmake
 
-Open with intent - we welcome contributions - we want pull requests and to
-hear about issues.
+This repo was created to test building a [CMake](https://cmake.org/) based
+layer for [Yocto](https://www.yoctoproject.org/)
 
-## Who is this for?
+The example code is copied from the
+[cpswan-hello-cmake](https://github.com/atsign-foundation/Atsign_OpenWRT_packages/tree/cpswan-hello-cmake)
+branch of the Atsign_OpenWRT_packages repo.
 
-The README should be addressed to somebody who's never seen this before.
-But also don't assume that they're a novice.
-
-### Code user
-
-Does this repo publish to [pub.dev](https://pub.dev) or similar?
-In which case the code user just needs a pointer there - e.g. [at_client on pub.dev](https://pub.dev/packages/at_client)
-
-### Contributor
-
-This is the person who we want working with us here.
-[CONTRIBUTING.md](CONTRIBUTING.md) is going to have the detailed guidance
-on how to setup their tools, tests and how to make a pull request.
+The framework is based on the
+[Hello World CMake Recipe](https://github.com/joaocfernandes/Learn-Yocto/blob/master/develop/Recipe-CMake.md)
+from [Learn Yocto](https://github.com/joaocfernandes/Learn-Yocto)
 
 ## Why, What, How?
 
 ### Why?
 
-What is the purpose of this project?
+This was created as a stepping stone to building a CMake sshnpd layer.
 
 ### What?
 
-What is needed to get the project and its dependencies installed?
+[Learn Yocto](https://github.com/joaocfernandes/Learn-Yocto) provides
+a guide to creating a Raspberry Pi base build, though this was done
+with the `kirkstone` branch (presently 4.0.16).
+
+The `build/conf/bblayers.conf` in `poky` is:
+
+```conf
+# POKY_BBLAYERS_CONF_VERSION is increased each time build/conf/bblayers.conf
+# changes incompatibly
+POKY_BBLAYERS_CONF_VERSION = "2"
+
+BBPATH = "${TOPDIR}"
+BBFILES ?= ""
+
+BBLAYERS ?= " \
+  /home/chris/git/git.yoctoproject.org/poky/meta \
+  /home/chris/git/git.yoctoproject.org/poky/meta-poky \
+  /home/chris/git/git.yoctoproject.org/poky/meta-yocto-bsp \
+  /home/chris/git/git.yoctoproject.org/poky/meta-openembedded/meta-oe \
+  /home/chris/git/git.yoctoproject.org/poky/meta-openembedded/meta-multimedia \
+  /home/chris/git/git.yoctoproject.org/poky/meta-openembedded/meta-networking \
+  /home/chris/git/git.yoctoproject.org/poky/meta-openembedded/meta-python \
+  /home/chris/git/git.yoctoproject.org/poky/meta-raspberrypi \
+  /home/chris/git/git.yoctoproject.org/poky/meta-hellocmake \
+  "
+```
+
+In `build/conf/local.conf`:
+
+```conf
+MACHINE = "raspberrypi3-64"
+
+EXTRA_IMAGE_FEATURES ?= "debug-tweaks ssh-server-openssh"
+
+IMAGE_INSTALL:append = " hellocmake"
+
+IMAGE_ROOTFS_EXTRA_SPACE = "524288"
+
+ENABLE_UART = "1"
+
+BB_HASHSERVE_UPSTREAM = "hashserv.yocto.io:8687"
+SSTATE_MIRRORS ?= "file://.* http://sstate.yoctoproject.org/all/PATH;downloadfilename=PATH"
+```
 
 ### How?
 
-How does this work? How is this used to fulfil its intended purpose?
+First source the poky build environment:
 
-## Checklist
+```sh
+. oe-init-build-env
+```
 
-### Writing
+The build is done with:
 
-Does the writing flow, with proper grammar and correct spelling?
+```sh
+bitbake -k core-image-base
+```
 
-### Links
+This creates a `core-image-base-raspberrypi3-64.wic.bz2` in
+`$POKYROOT/build/tmp/deploy/images/raspberrypi3-64/`
 
-Are the links to external resources correct?
-Are the links to other parts of the project correct
-(beware stuff carried over from previous repos where the
-project might have lived during earlier development)?
-
-### Description
-
-Has the Description field been filled out?
-
-### Acknowledgement/Attribution
-
-Have we correctly acknowledged the work of others (and their Trademarks etc.)
-where appropriate (per the conditions of their LICENSE?
-
-### LICENSE
-
-Which LICENSE are we using?  
-Is the LICENSE(.md) file present?  
-Does it have the correct dates, legal entities etc.?
+The decompressed `.wic` file can then be imaged onto an SD card for the Pi.
 
 ## Maintainers
 
-Who created this?  
-
-Do they have complete GitHub profiles?  
-
-How can they be contacted?  
-
-Who is going to respond to pull requests?  
+Created by [@cpswan](https://github.com/cpswan)
