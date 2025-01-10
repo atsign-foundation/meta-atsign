@@ -5,10 +5,22 @@ alt="The Atsign Foundation"></a>
 src="https://atsign.com/wp-content/uploads/2023/08/atsign-logo-horizontal-reverse2022-Color.svg#gh-dark-mode-only"
 alt="The Atsign Foundation"></a></h1>
 
-# meta-hellocmake
+# meta-atsign
 
 This repo was created to test building a [CMake](https://cmake.org/) based
 layer for [Yocto](https://www.yoctoproject.org/)
+
+## recipes-sshnpd/sshnpd
+
+This is a work in progress recipe to build the C sshnpd daemon for Yocto.
+
+There are presently a number of ugly hacks in place to deal with our use of
+FetchContent in the CMake build.
+
+At present csshnpd will build standalone, but isn't working as part of an
+image. [#2](https://github.com/atsign-foundation/meta-atsign/issues/2)
+
+## recipes-hello/hellocmake
 
 The example code is copied from the
 [cpswan-hello-cmake](https://github.com/atsign-foundation/Atsign_OpenWRT_packages/tree/cpswan-hello-cmake)
