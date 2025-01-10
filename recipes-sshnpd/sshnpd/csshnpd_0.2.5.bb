@@ -9,8 +9,8 @@ SRC_URI[sha256sum] = "e0edca6058ed64375d32b64a17f8e0c9ceaf0f9d9cd9807e00a63a0e87
 S = "${WORKDIR}/csshnpd-c${PV}"
 
 #https://stackoverflow.com/questions/64984897/yocto-package-requires-shared-library-but-no-providers-found-in-rdepends
-DEPENDS += " libcjson"
-RDEPENDS_${PN} += " libcjson.so.1()(64bit)"
+#DEPENDS += " libcjson"
+#RDEPENDS_${PN} += " libcjson.so.1()(64bit)"
 
 #https://stackoverflow.com/questions/61144014/errors-including-shared-prebuilt-libraries-in-petalinux
 INSANE_SKIP:${PN} += "file-rdeps"
