@@ -4,7 +4,7 @@ LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/${LICENSE};md5=550794465ba0ec5312d6919e203a55f9"
 
 SRC_URI = "https://github.com/atsign-foundation/noports/releases/download/c${PV}/csshnpd-c${PV}.tar.gz"
-SRC_URI[sha256sum] = "8e23d0c45188c9e095385d488b308c9107a42ae6974239ca913123344d96fd46"
+SRC_URI[sha256sum] = "95ac9024edd0022fa2521535e6f43ba6ca42cd160f69365b880cc056ab3837e6"
 
 S = "${WORKDIR}/csshnpd-c${PV}"
 
