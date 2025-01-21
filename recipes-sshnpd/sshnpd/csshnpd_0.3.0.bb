@@ -4,7 +4,7 @@ LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/${LICENSE};md5=550794465ba0ec5312d6919e203a55f9"
 
 SRC_URI = "https://github.com/atsign-foundation/noports/releases/download/c${PV}/csshnpd-c${PV}.tar.gz"
-SRC_URI[sha256sum] = "e0edca6058ed64375d32b64a17f8e0c9ceaf0f9d9cd9807e00a63a0e87c3816a"
+SRC_URI[sha256sum] = "8e23d0c45188c9e095385d488b308c9107a42ae6974239ca913123344d96fd46"
 
 S = "${WORKDIR}/csshnpd-c${PV}"
 
@@ -38,6 +38,7 @@ do_compile[network] = "1"
 
 do_install() {
 	install -d ${D}${bindir}
-	ls -latrR ${B}
+	install -m 0755 sshnpd/at_auth_cli ${D}${bindir}
+	install -m 0755 sshnpd/atactivate ${D}${bindir}
 	install -m 0755 sshnpd/sshnpd ${D}${bindir}
 }
