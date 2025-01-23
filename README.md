@@ -7,40 +7,25 @@ alt="The Atsign Foundation"></a></h1>
 
 # meta-atsign
 
-This repo was created to test building a [CMake](https://cmake.org/) based
-layer for [Yocto](https://www.yoctoproject.org/)
+This repo was created to build a [CMake](https://cmake.org/) based layer for
+[Yocto](https://www.yoctoproject.org/)
 
 ## recipes-sshnpd/sshnpd
 
 This is a work in progress recipe to build the C sshnpd daemon for Yocto.
 
-There are presently a number of ugly hacks in place to deal with our use of
-FetchContent in the CMake build.
+As our CMake builds presently use FetchContent to pull down dependencies
+the recipe is configured to allow network access at build time.
 
-At present csshnpd will build standalone, but isn't working as part of an
-image. [#2](https://github.com/atsign-foundation/meta-atsign/issues/2)
+The recipe can be added to an image config with:
 
-## recipes-hello/hellocmake
+```
+IMAGE_INSTALL:append = " csshnpd"
+```
 
-The example code is copied from the
-[cpswan-hello-cmake](https://github.com/atsign-foundation/Atsign_OpenWRT_packages/tree/cpswan-hello-cmake)
-branch of the Atsign_OpenWRT_packages repo.
+### Using the recipe
 
-The framework is based on the
-[Hello World CMake Recipe](https://github.com/joaocfernandes/Learn-Yocto/blob/master/develop/Recipe-CMake.md)
-from [Learn Yocto](https://github.com/joaocfernandes/Learn-Yocto)
-
-## Why, What, How?
-
-### Why?
-
-This was created as a stepping stone to building a CMake sshnpd layer.
-
-### What?
-
-[Learn Yocto](https://github.com/joaocfernandes/Learn-Yocto) provides
-a guide to creating a Raspberry Pi base build, though this was done
-with the `kirkstone` branch (presently 4.0.16).
+This has been tested using the `scarthgap` branch (presently 5.0.2).
 
 The `build/conf/bblayers.conf` in `poky` is:
 
@@ -56,33 +41,17 @@ BBLAYERS ?= " \
   /home/chris/git/git.yoctoproject.org/poky/meta \
   /home/chris/git/git.yoctoproject.org/poky/meta-poky \
   /home/chris/git/git.yoctoproject.org/poky/meta-yocto-bsp \
-  /home/chris/git/git.yoctoproject.org/poky/meta-openembedded/meta-oe \
-  /home/chris/git/git.yoctoproject.org/poky/meta-openembedded/meta-multimedia \
-  /home/chris/git/git.yoctoproject.org/poky/meta-openembedded/meta-networking \
-  /home/chris/git/git.yoctoproject.org/poky/meta-openembedded/meta-python \
-  /home/chris/git/git.yoctoproject.org/poky/meta-raspberrypi \
-  /home/chris/git/git.yoctoproject.org/poky/meta-hellocmake \
+  /home/chris/git/github/atsign-foundation/meta-atsign \
   "
 ```
 
 In `build/conf/local.conf`:
 
 ```conf
-MACHINE = "raspberrypi3-64"
-
-EXTRA_IMAGE_FEATURES ?= "debug-tweaks ssh-server-openssh"
-
-IMAGE_INSTALL:append = " hellocmake"
-
-IMAGE_ROOTFS_EXTRA_SPACE = "524288"
-
-ENABLE_UART = "1"
-
-BB_HASHSERVE_UPSTREAM = "hashserv.yocto.io:8687"
-SSTATE_MIRRORS ?= "file://.* http://sstate.yoctoproject.org/all/PATH;downloadfilename=PATH"
+IMAGE_INSTALL:append = " csshnpd"
 ```
 
-### How?
+### Creating a test image
 
 First source the poky build environment:
 
@@ -93,13 +62,8 @@ First source the poky build environment:
 The build is done with:
 
 ```sh
-bitbake -k core-image-base
+bitbake core-image-sato
 ```
-
-This creates a `core-image-base-raspberrypi3-64.wic.bz2` in
-`$POKYROOT/build/tmp/deploy/images/raspberrypi3-64/`
-
-The decompressed `.wic` file can then be imaged onto an SD card for the Pi.
 
 ## Maintainers
 
